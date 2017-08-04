@@ -41,10 +41,11 @@ RUN apk --no-cache add --virtual .build-dependencies \
   postgresql-dev \
   git
 
+ADD . /usr/src/app
+
 RUN bundle install --system --jobs=4 --no-cache --without development test --clean \
 && apk del .build-dependencies
 
-ADD . /usr/src/app
 ```
 
 ### Build the docker image
