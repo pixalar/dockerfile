@@ -1,14 +1,15 @@
-FROM ruby:2.4.1-alpine
-MAINTAINER Sergey Shkarupa <s.shkarupa@gmail.com>
+FROM ruby:2.4.2-alpine3.6
+LABEL maintainer: "Sergey Shkarupa <s.shkarupa@gmail.com>"
 
-ENV SYSTEM_DEPS \
+RUN apk add --no-cache \
   postgresql-client \
   nodejs \
   imagemagick \
   file \
+  less \
   tzdata
 
-RUN apk --no-cache add $SYSTEM_DEPS
+RUN bundle config build.nokogiri --use-system-libraries
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

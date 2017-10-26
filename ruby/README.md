@@ -1,10 +1,11 @@
-# Ruby with dependences on Alpine 2.4.1
+# Ruby 2.4.2 with dependences on Alpine 3.6
 
 This will build the base image needed to run any rails app that uses
 
 * Postgres Database
-* Ruby 2.4.1
+* Ruby 2.4.2
 * NodeJS
+* Imagemagic
 
 ## How to Use
 
@@ -17,16 +18,20 @@ Create a `Dockerfile` with the following content
 ```
 FROM pixalar/ruby:latest
 
-ENV BUILD_DEPS \
+RUN apk --no-cache add \
   build-base \
   libxml2-dev \
   libxslt-dev \
   postgresql-dev \
   git
 
-RUN apk --no-cache add $BUILD_DEPS
+WORKDIR /usr/src/app
 
-ADD . /usr/src/app
+VOLUME /usr/src/app
+
+EXPOSE 3000
+
+CMD ["bin/rails", "s", "-b", "0.0.0.0"]
 ```
 
 **Production version**
@@ -41,7 +46,7 @@ RUN apk --no-cache add --virtual .build-dependencies \
   postgresql-dev \
   git
 
-ADD . /usr/src/app
+COPY . /usr/src/app
 
 RUN bundle install --system --jobs=4 --no-cache --without development test --clean \
 && apk del .build-dependencies
